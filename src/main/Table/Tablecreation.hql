@@ -10,7 +10,7 @@ tmin decimal(7,2),
 tmean decimal(7,2))
 PARTITIONED BY (YearID int)
 STORED AS PARQUET
-LOCATION '/user/hive/warehouse/gcv360_test.db/stockholm_temperature';
+LOCATION '/user/hive/external/gcv360_test.db/stockholm_temperature';
 
 CREATE EXTERNAL TABLE gcv360_test.stockholm_pressure (
 year int,
@@ -21,4 +21,4 @@ noon_observation decimal(7,2),
 evening_observation decimal(7,2))
 PARTITIONED BY (YearID int)
 STORED AS PARQUET
-LOCATION '/user/hive/warehouse/gcv360_test.db/stockholm_pressure';
+LOCATION '/user/hive/external/gcv360_test.db/stockholm_pressure';
