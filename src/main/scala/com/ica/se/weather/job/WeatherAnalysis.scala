@@ -17,9 +17,9 @@ object WeatherAnalysis {
   def main(args: Array[String]): Unit = {
 
     val spark = SparkSession.builder.appName(appName).getOrCreate()
-    val newlog = Logger.apply(this.getClass)
+    val logger = Logger.apply(this.getClass)
 
-    newlog.info(LocalDateTime.now() + " : ********** WeatherAnalysis Job Started ***********")
+    logger.info("WeatherAnalysis Job Started")
 
     try {
       //downloading  the  temperature &  air pressure files from the website link & copying it to HDFS
@@ -39,11 +39,11 @@ object WeatherAnalysis {
         .mode(SaveMode.Overwrite)
         .parquet(usecase_min_max_temperature_pressure)
 
-      newlog.info(LocalDateTime.now() + " : ********** WeatherAnalysis Job completed!! ***********")
+      logger.info("WeatherAnalysis Job completed")
     } catch {
       case e: Exception => {
 
-        newlog.error(LocalDateTime.now() + e.getMessage())
+        logger.error(LocalDateTime.now() + e.getMessage())
 
         throw e
       }
@@ -54,10 +54,10 @@ object WeatherAnalysis {
     }
   }
 
-  def doDownloadAndCopyHDFS(newlog: Logger): Unit = {
+  def doDownloadAndCopyHDFS(logger: Logger): Unit = {
 
     //deleting old input files from local folder
-    newlog.info(LocalDateTime.now() + " : deleting old input files from local folder ")
+    logger.info("deleting old input files from local folder ")
     Option(
       new File(Temp_local_dir).listFiles
         .filter(_.getName.startsWith(Temp_local_file_name))
@@ -70,7 +70,7 @@ object WeatherAnalysis {
         .foreach(_.delete)
     )
 
-    newlog.info(LocalDateTime.now() + " : downloading all the files from website link to local & copying it to hdfs")
+    logger.info("downloading all the files from website link to local & copying it to hdfs")
 
     for (f <- pressure_temp_list) {
       val hadoopConf = new Configuration()
@@ -90,7 +90,7 @@ object WeatherAnalysis {
 
   def doProcessAndLoadData(spark: SparkSession,newlog: Logger): Unit = {
 
-    newlog.info(LocalDateTime.now() + ": data cleansing and Processing the source file")
+    logger.info("data cleansing and Processing the source file")
 
     for (f <- pressure_temp_list) {
 
