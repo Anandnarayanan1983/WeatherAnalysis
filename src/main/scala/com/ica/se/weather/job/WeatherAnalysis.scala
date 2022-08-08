@@ -23,9 +23,9 @@ object WeatherAnalysis {
 
     try {
       //downloading  the  temperature &  air pressure files from the website link & copying it to HDFS
-      doDownloadAndCopyHDFS(newlog)
+      doDownloadAndCopyHDFS(logger)
       //data cleansing and Processing
-      doProcessAndLoadData(spark,newlog)
+      doProcessAndLoadData(spark,logger)
       // repairing the table to include the partitions which are created after the table creation.
       spark.sql(repair_temperature_table)
 
@@ -88,7 +88,7 @@ object WeatherAnalysis {
     }
   }
 
-  def doProcessAndLoadData(spark: SparkSession,newlog: Logger): Unit = {
+  def doProcessAndLoadData(spark: SparkSession,logger: Logger): Unit = {
 
     logger.info("data cleansing and Processing the source file")
 
